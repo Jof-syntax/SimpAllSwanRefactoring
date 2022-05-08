@@ -52,7 +52,7 @@ classdef SimpAllInterpolationExplicit < MaterialInterpolation
             etaMu = num/den;
         end
         
-        function eta = computeEtaKappa(obj,mu)
+        function etaKappa = computeEtaKappa(obj,mu)
             N   = obj.ndim;
             num = 2*mu(N-1);
             den = N;

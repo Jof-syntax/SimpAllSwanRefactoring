@@ -16,7 +16,7 @@ classdef MaterialInterpolationFactory < handle
                                 case 'IMPLICIT'
                                     obj = SimpAllInterpolationImplicit(cParams);
                                 otherwise
-                                    error('Invalid SimpAll type');
+                                    error('Invalid SimpAll type.');
                             end
                         case 'SIMP_Adaptative'
                             obj = SimpInterpolationAdaptative(cParams);

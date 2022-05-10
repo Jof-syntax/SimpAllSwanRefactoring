@@ -1,42 +1,28 @@
 classdef SimpAllInterpolationImplicit < MaterialInterpolation
     
-    methods  (Access = public)
-        
-        function obj = SimpAllInterpolationImplicit(cParams)
-            obj.init(cParams);
-            obj.computeNstre();
-            switch obj.ndim
-                case 2
-                    obj = SimpAllInterpolationImplicit2D(cParams);
-                case 3
-                    obj = SimpAllInterpolationImplicit3D(cParams);
-                otherwise
-                    error('Invalid problem dimension.');
-            end
-        end
-
+    properties (Access = protected)
+       dmu0
+       dmu1
+       dk0
+       dk1
     end
        
     methods (Access = protected)
         
         function [mS,dmS] = computeMuSymbolicFunctionAndDerivative(obj)
-            dmu0     = obj.computeDmu0();
-            dmu1     = obj.computeDmu1();
             s.f0     = obj.matProp.mu0;
             s.f1     = obj.matProp.mu1;
-            s.df0    = dmu0;
-            s.df1    = dmu1;
+            s.df0    = obj.dmu0;
+            s.df1    = obj.dmu1;
             [mS,dmS] = obj.computeParameterInterpolationAndDerivative(s);
         end
         
         function [kS,dkS] = computeKappaSymbolicFunctionAndDerivative(obj)
-            dk0      = obj.computeDKappa0();
-            dk1      = obj.computeDKappa1();
             s.f0     = obj.matProp.kappa0;
             s.f1     = obj.matProp.kappa1;
-            s.df0    = dk0;
-            s.df1    = dk1;
-            [kS,dkS] = obj.computeParameterInterpolationAndDeirvative(s);
+            s.df0    = obj.dk0;
+            s.df1    = obj.dk1;
+            [kS,dkS] = obj.computeParameterInterpolationAndDerivative(s);
         end
         
         function [f,df] = computeParameterInterpolationAndDerivative(obj,s)
@@ -97,13 +83,6 @@ classdef SimpAllInterpolationImplicit < MaterialInterpolation
             dr  = dr1 + dr2;
         end
         
-    end
-    
-    methods (Access = protected, Abstract)
-        computeDmu0(obj)
-        computeDmu1(obj)
-        computeDKappa0(obj)
-        computeDKappa1(obj)
     end
     
 end

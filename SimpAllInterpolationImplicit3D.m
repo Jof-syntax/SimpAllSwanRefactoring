@@ -2,7 +2,13 @@ classdef SimpAllInterpolationImplicit3D < SimpAllInterpolationImplicit
     
    methods  (Access = public)
         
-        function obj = SimpAllInterpolationImplicit3D()
+        function obj = SimpAllInterpolationImplicit3D(cParams)
+            obj.init(cParams);
+            obj.computeNstre();
+            obj.dmu0 = obj.computeDmu0();
+            obj.dmu1 = obj.computeDmu1();
+            obj.dk0  = obj.computeDKappa0();
+            obj.dk1  = obj.computeDKappa1();
             obj.computeSymbolicInterpolationFunctions();
         end
 
@@ -10,7 +16,7 @@ classdef SimpAllInterpolationImplicit3D < SimpAllInterpolationImplicit
         
     methods  (Access = protected)
         
-        function [dMu,dKappa] = computePolarizationParametersAsMuKappa(eMatrix,eInclusion,nuMatrix,nuInclusion)
+        function [dMu,dKappa] = computePolarizationParametersAsMuKappa(obj, eMatrix,eInclusion,nuMatrix,nuInclusion)
             [m1,m2] = obj.compute3Dcoefficients(eMatrix,eInclusion,nuMatrix,nuInclusion);
             [dMu,dKappa] = obj.computeDkappaDmu(m1,m2);
         end
@@ -23,7 +29,7 @@ classdef SimpAllInterpolationImplicit3D < SimpAllInterpolationImplicit
             mu0 = obj.matProp.mu0;
             mu1 = obj.matProp.mu1;
             [dMu0,~] = obj.computePolarizationParametersAsMuKappa(E0,E1,nu0,nu1);
-            qmu0 = dMu0/(mu0*(m1-mu0));
+            qmu0 = dMu0/(mu0*(mu1-mu0));
             dmu0 = mu0*(mu1-mu0)*qmu0;
         end
         
@@ -35,7 +41,7 @@ classdef SimpAllInterpolationImplicit3D < SimpAllInterpolationImplicit
             mu0 = obj.matProp.mu0;
             mu1 = obj.matProp.mu1;
             [dMu1,~] = obj.computePolarizationParametersAsMuKappa(E1,E0,nu1,nu0);
-            qmu1 = dMu1/(mu1*(m0-mu1));
+            qmu1 = dMu1/(mu1*(mu0-mu1));
             dmu1 = mu1*(mu1-mu0)*qmu1;
         end
         

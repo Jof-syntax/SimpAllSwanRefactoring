@@ -2,8 +2,14 @@ classdef SimpAllInterpolationImplicit2D < SimpAllInterpolationImplicit
     
    methods  (Access = public)
         
-        function obj = SimpAllInterpolationImplicit2D()
+        function obj = SimpAllInterpolationImplicit2D(cParams)
+            obj.init(cParams);
+            obj.computeNstre();
             obj.computeSymbolicInterpolationFunctions();
+            obj.dmu0 = obj.computeDmu0();
+            obj.dmu1 = obj.computeDmu1();
+            obj.dk0  = obj.computeDKappa0();
+            obj.dk1  = obj.computeDKappa1();
         end
 
    end
